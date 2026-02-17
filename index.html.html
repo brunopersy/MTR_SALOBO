@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MTR Salobo - Material Rodante</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:       #1a1e1a;
+  --panel:    #222722;
+  --card:     #2a302a;
+  --border:   #363e36;
+  --border2:  #424a42;
+
+  --orange:   #ff6b00;
+  --orange2:  #e55f00;
+  --green:    #00c851;
+  --green2:   #00a843;
+  --yellow:   #ffc107;
+  --red:      #ff3333;
+
+  --t1:       #f0f4f0;
+  --t2:       #a8b8a8;
+  --t3:       #607060;
+  --t4:       #3a4a3a;
+
+  --font-title: 'Rajdhani', sans-serif;
+  --font-body:  'Source Sans 3', sans-serif;
+  --font-mono:  'Share Tech Mono', monospace;
+
+  --r:        6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { background: var(--bg); color: var(--t1); font-family: var(--font-body); font-size: 14px; }
+
+/* ── HEADER ── */
+header {
+  height: 60px;
+  background: var(--panel);
+  border-bottom: 3px solid var(--orange);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  position: relative; z-index: 100;
+}
+.hlogo {
+  display: flex; align-items: center; gap: 14px;
+}
+.hlogo-badge {
+  background: var(--orange);
+  color: #fff;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: .12em;
+  padding: 5px 12px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+.hlogo-text {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: .08em;
+  color: var(--t1);
+  text-transform: uppercase;
+}
+.hlogo-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--t3);
+  letter-spacing: .15em;
+  margin-top: 1px;
+}
+.hright {
+  display: flex; align-items: center; gap: 20px;
+}
+.hstatus {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--green);
+}
+.hstatus-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2.5s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.7)} }
+.hdate {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--t3);
+}
+
+/* ── LAYOUT ── */
+.app {
+  display: grid;
+  grid-template-columns: 280px 1fr 360px;
+  grid-template-rows: 92px calc(100vh - 60px - 92px);
+  height: calc(100vh - 60px);
+}
+
+/* ── KPI BAR ── */
+.kpi-bar {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+.kpi {
+  padding: 14px 20px;
+  border-right: 1px solid var(--border);
+  position: relative;
+  cursor: default;
+  transition: background .2s;
+}
+.kpi:last-child { border-right: none; }
+.kpi:hover { background: var(--card); }
+.kpi-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--t3);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.kpi-value {
+  font-family: var(--font-title);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+}
+.kpi-sub { font-size: 11px; color: var(--t3); margin-top: 3px; }
+.kpi-stripe {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+}
+.kpi.red .kpi-value    { color: var(--red); }
+.kpi.red .kpi-stripe   { background: var(--red); }
+.kpi.orange .kpi-value { color: var(--orange); }
+.kpi.orange .kpi-stripe{ background: var(--orange); }
+.kpi.green .kpi-value  { color: var(--green); }
+.kpi.green .kpi-stripe { background: var(--green); }
+.kpi.neutral .kpi-stripe { background: var(--border2); }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+.sb-group-title {
+  padding: 10px 16px 7px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--t3);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0;
+  background: var(--panel);
+  z-index: 5;
+}
+.sb-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+.sb-badge.red    { background: #ff333322; color: var(--red);    border: 1px solid #ff333344; }
+.sb-badge.orange { background: #ff6b0022; color: var(--orange); border: 1px solid #ff6b0044; }
+.sb-badge.green  { background: #00c85122; color: var(--green);  border: 1px solid #00c85144; }
+
+.item-card {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .15s;
+  display: flex; align-items: center; gap: 10px;
+}
+.item-card:hover   { background: var(--card); }
+.item-card.active  { background: #2d3a2d; border-left: 3px solid var(--orange); }
+
+.ic-indicator {
+  width: 10px; height: 10px;
+  border-radius: 50%; flex-shrink: 0;
+}
+.ic-indicator.red    { background: var(--red);    box-shadow: 0 0 8px #ff333388; }
+.ic-indicator.orange { background: var(--orange); box-shadow: 0 0 8px #ff6b0066; }
+.ic-indicator.green  { background: var(--green); }
+
+.ic-body { flex: 1; min-width: 0; }
+.ic-tag {
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: .05em;
+}
+.ic-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--t3);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-top: 1px;
+}
+.ic-tag-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.ic-tag-badge.red    { background: #ff333322; color: var(--red);    border: 1px solid #ff333333; }
+.ic-tag-badge.orange { background: #ff6b0022; color: var(--orange); border: 1px solid #ff6b0033; }
+.ic-tag-badge.green  { background: #00c85122; color: var(--green);  border: 1px solid #00c85133; }
+
+/* ── MAIN ── */
+.main { overflow-y: auto; background: var(--bg); }
+
+.empty-state {
+  height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 16px;
+  color: var(--t4);
+}
+.empty-icon {
+  font-size: 56px;
+  opacity: .2;
+}
+.empty-text {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--t3);
+  letter-spacing: .1em;
+}
+
+/* DETAIL */
+.detail { padding: 24px; }
+
+.detail-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 24px;
+  gap: 20px;
+}
+.detail-tag {
+  font-family: var(--font-title);
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  line-height: 1;
+  color: var(--t1);
+}
+.detail-modelo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--t3);
+  letter-spacing: .12em;
+  margin-top: 4px;
+}
+.detail-meta {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--t2);
+}
+.detail-meta span {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+
+.status-pill {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: .2em;
+  padding: 6px 16px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.status-pill.red    { background: #ff333318; color: var(--red);    border: 2px solid #ff333344; }
+.status-pill.orange { background: #ff6b0018; color: var(--orange); border: 2px solid #ff6b0044; }
+.status-pill.green  { background: #00c85118; color: var(--green);  border: 2px solid #00c85144; }
+
+.urgencia-box { text-align: right; margin-top: 10px; }
+.urgencia-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--t3);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+.urgencia-val {
+  font-family: var(--font-title);
+  font-size: 26px;
+  font-weight: 700;
+}
+.urgencia-val.red    { color: var(--red); }
+.urgencia-val.orange { color: var(--orange); }
+
+/* VIDA UTIL */
+.vida-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 16px;
+}
+.vida-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--t3);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  width: 90px;
+}
+.vida-bar-wrap { flex: 1; }
+.vida-bar-track {
+  background: var(--border2);
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.vida-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width .7s ease;
+}
+.vida-bar-labels {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--t3);
+  margin-top: 4px;
+}
+.vida-pct {
+  font-family: var(--font-title);
+  font-size: 28px;
+  font-weight: 700;
+  width: 72px;
+  text-align: right;
+}
+
+/* SECTION TITLE */
+.sec-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--t3);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.sec-title-line { flex: 1; height: 1px; background: var(--border); }
+
+/* ROLETES SUPERIORES */
+.rol-sup-grid {
+  display: flex; gap: 8px;
+  margin-bottom: 24px;
+}
+.rol-card {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 10px 8px;
+  text-align: center;
+  transition: border-color .2s;
+}
+.rol-card.bad { border-color: var(--red); background: #ff333308; }
+.rol-card-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--t3);
+  letter-spacing: .1em;
+  margin-bottom: 4px;
+}
+.rol-card-val {
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--t1);
+}
+.rol-card.bad .rol-card-val { color: var(--red); }
+.rol-deg-bar { height: 4px; background: var(--border2); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.rol-deg-fill { height: 100%; border-radius: 2px; }
+.rol-deg-pct {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  margin-top: 3px;
+  text-align: center;
+}
+
+/* COMPONENTS GRID */
+.comp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.comp-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s, background .2s;
+}
+.comp-card.bad {
+  border-color: var(--red);
+  background: #1e1414;
+}
+.comp-card.warn-card {
+  border-color: var(--orange);
+  background: #1e1810;
+}
+.comp-card-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 6px;
+}
+.comp-name {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--t3);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.comp-alert {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--red);
+  background: #ff333322;
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+.comp-val {
+  font-family: var(--font-title);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--t1);
+  margin-bottom: 2px;
+}
+.comp-val.bad    { color: var(--red); }
+.comp-val.warn-v { color: var(--orange); }
+.comp-unit {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--t3);
+  margin-bottom: 10px;
+}
+.comp-deg-row {
+  display: flex; align-items: center; gap: 8px;
+}
+.comp-deg-bar { flex: 1; height: 6px; background: var(--border2); border-radius: 3px; overflow: hidden; }
+.comp-deg-fill { height: 100%; border-radius: 3px; transition: width .6s; }
+.comp-deg-pct {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  width: 30px;
+  text-align: right;
+  font-weight: 700;
+}
+.comp-limits {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--t4);
+  margin-top: 5px;
+}
+
+/* DESVIOS */
+.desvios-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.desvio-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.desvio-row:last-child { border-bottom: none; }
+.desvio-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.desvio-label { flex: 1; font-size: 13px; font-weight: 600; }
+.desvio-medido {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--t2);
+  white-space: nowrap;
+}
+.desvio-pct {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--red);
+  width: 44px;
+  text-align: right;
+}
+.ok-box {
+  background: #00c85110;
+  border: 1px solid #00c85130;
+  border-radius: var(--r);
+  padding: 14px 18px;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green);
+}
+
+/* ── CHAT ── */
+.chat-col {
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.chat-header {
+  padding: 14px 16px;
+  border-bottom: 2px solid var(--orange);
+  display: flex; align-items: center; gap: 10px;
+  flex-shrink: 0;
+  background: var(--card);
+}
+.chat-header-icon {
+  width: 32px; height: 32px;
+  background: var(--orange);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.chat-header-title {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.chat-header-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--t3);
+  letter-spacing: .1em;
+}
+
+.quick-btns {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; gap: 6px;
+  flex-shrink: 0;
+}
+.qbtn {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--t2);
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all .15s;
+  line-height: 1.4;
+  text-align: left;
+}
+.qbtn:hover { border-color: var(--orange); color: var(--orange); background: #ff6b0010; }
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.msg {
+  max-width: 96%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.55;
+  animation: msgIn .2s ease;
+}
+@keyframes msgIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+.msg.user {
+  align-self: flex-end;
+  background: #1e2e1e;
+  border: 1px solid #00c85133;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.msg.agent {
+  align-self: flex-start;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--t1);
+  white-space: pre-wrap;
+}
+.msg.loading {
+  align-self: flex-start;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--t3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.chat-input-row {
+  padding: 12px 14px;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 8px; align-items: center;
+  flex-shrink: 0;
+}
+.ci {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 8px 12px;
+  color: var(--t1);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  outline: none;
+  transition: border-color .2s;
+}
+.ci:focus { border-color: var(--orange); }
+.ci::placeholder { color: var(--t4); }
+.cs {
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-family: var(--font-title);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s;
+}
+.cs:hover { background: var(--orange2); }
+.cs:disabled { opacity: .4; cursor: default; }
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hlogo">
+    <div class="hlogo-badge">MTR</div>
+    <div>
+      <div class="hlogo-text">Material Rodante &mdash; Salobo</div>
+      <div class="hlogo-sub">Pit Viper DR416i &bull; FlexiROC D65 &bull; PCM</div>
+    </div>
+  </div>
+  <div class="hright">
+    <div class="hstatus"><div class="hstatus-dot"></div>SISTEMA ATIVO</div>
+    <div class="hdate" id="ts"></div>
+  </div>
+</header>
+
+<div class="app">
+
+  <!-- KPI BAR -->
+  <div class="kpi-bar">
+    <div class="kpi red">
+      <div class="kpi-stripe"></div>
+      <div class="kpi-label">Criticos</div>
+      <div class="kpi-value" id="kCrit">0</div>
+      <div class="kpi-sub">substituicao urgente</div>
+    </div>
+    <div class="kpi orange">
+      <div class="kpi-stripe"></div>
+      <div class="kpi-label">Atencao</div>
+      <div class="kpi-value" id="kAten">0</div>
+      <div class="kpi-sub">programar substituicao</div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-stripe"></div>
+      <div class="kpi-label">OK</div>
+      <div class="kpi-value" id="kOk">0</div>
+      <div class="kpi-sub">dentro dos parametros</div>
+    </div>
+    <div class="kpi neutral">
+      <div class="kpi-stripe"></div>
+      <div class="kpi-label">Total Inspecoes</div>
+      <div class="kpi-value" id="kTotal">0</div>
+      <div class="kpi-sub">este ciclo</div>
+    </div>
+    <div class="kpi neutral">
+      <div class="kpi-stripe"></div>
+      <div class="kpi-label">Equipamentos</div>
+      <div class="kpi-value" id="kEquip">0</div>
+      <div class="kpi-sub">TAGs unicos</div>
+    </div>
+    <div class="kpi neutral">
+      <div class="kpi-stripe"></div>
+      <div class="kpi-label">Ultima Inspecao</div>
+      <div class="kpi-value" id="kData" style="font-size:20px;margin-top:6px">--</div>
+      <div class="kpi-sub" id="kAnalista">--</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-group-title">
+      Criticos
+      <span class="sb-badge red" id="scCrit">0</span>
+    </div>
+    <div id="listCrit"></div>
+
+    <div class="sb-group-title">
+      Atencao
+      <span class="sb-badge orange" id="scAten">0</span>
+    </div>
+    <div id="listAten"></div>
+
+    <div class="sb-group-title">
+      OK
+      <span class="sb-badge green" id="scOk">0</span>
+    </div>
+    <div id="listOk"></div>
+  </aside>
+
+  <!-- MAIN DETAIL -->
+  <div class="main" id="mainPanel">
+    <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px">
+      <div class="empty-icon">&#9881;</div>
+      <div class="empty-text">Selecione um equipamento na lista</div>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-col">
+    <div class="chat-header">
+      <div class="chat-header-icon">&#129302;</div>
+      <div>
+        <div class="chat-header-title">Agente PCM</div>
+        <div class="chat-header-sub">Analise inteligente de material rodante</div>
+      </div>
+    </div>
+    <div class="quick-btns">
+      <button class="qbtn" onclick="qask('Gere o cronograma de substituicoes das proximas 4 semanas por TAG, lado, componente e urgencia')">&#128197; Cronograma PCM</button>
+      <button class="qbtn" onclick="qask('Quais TAGs tem maior risco de parada nao planejada?')">&#9888; Risco de Parada</button>
+      <button class="qbtn" onclick="qask('Compare o desgaste entre lado LC e LNC de cada TAG. Ha assimetria?')">&#8596; LC vs LNC</button>
+      <button class="qbtn" onclick="qask('Liste todos os componentes acima de 80% de desgaste ordenados por criticidade')">&#128203; Desgaste maior 80%</button>
+      <button class="qbtn" onclick="qask('Qual o impacto de adiar as substituicoes criticas por 15 dias?')">&#128295; Impacto Adiamento</button>
+    </div>
+    <div class="chat-messages" id="chatMsgs">
+      <div class="msg agent">Ola! Dados carregados com os parametros reais do fabricante (DR416i e FlexiROC D65). Selecione um equipamento ou use os atalhos acima para analises do PCM.</div>
+    </div>
+    <div class="chat-input-row">
+      <input class="ci" id="ci" placeholder="Pergunte sobre os dados..." onkeydown="if(event.key==='Enter')send()"/>
+      <button class="cs" id="csbtn" onclick="send()">Enviar</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// =========================================================
+// PARAMETROS DO FABRICANTE (lista "Parametros" do Lists)
+// novo  = valor da peca nova
+// limite = limite de desgaste (ponto de substituicao)
+// =========================================================
+var PARAMS = {
+  "Pit Viper/DR416i": {
+    roda_guia:  {novo:22.5,   limite:34.5,   tipo:"min", unit:"mm"},
+    elo:        {novo:155.5,  limite:142.5,  tipo:"min", unit:"mm"},
+    motriz:     {novo:284,    limite:270,    tipo:"min", unit:"mm"},
+    rolete_sup: {novo:190,    limite:167.5,  tipo:"min", unit:"mm"},
+    sapata:     {novo:85,     limite:70.6,   tipo:"min", unit:"mm"},
+    passo:      {novo:1042.5, limite:1055.5, tipo:"max", unit:"mm"},
+    bucha:      {novo:14,     limite:10.7,   tipo:"min", unit:"mm"},
+    rolete_inf: {novo:73.9,   limite:61.2,   tipo:"min", unit:"mm"},
+    danif_atencao:1, danif_critico:3, vida_util:50000
+  },
+  "FlexiROC D65": {
+    roda_guia:  {novo:17.5,  limite:25.5,   tipo:"min", unit:"mm"},
+    elo:        {novo:89,    limite:84.2,   tipo:"min", unit:"mm"},
+    motriz:     {novo:185,   limite:165,    tipo:"min", unit:"mm"},
+    rolete_sup: {novo:100,   limite:92,     tipo:"min", unit:"mm"},
+    sapata:     {novo:25,    limite:6,      tipo:"min", unit:"mm"},
+    passo:      {novo:686,   limite:698.7,  tipo:"max", unit:"mm"},
+    bucha:      {novo:8.2,   limite:3.2,    tipo:"min", unit:"mm"},
+    rolete_inf: {novo:43,    limite:36.5,   tipo:"min", unit:"mm"},
+    danif_atencao:1, danif_critico:3, vida_util:30000
+  }
+};
+
+function getP(modelo) {
+  var keys = Object.keys(PARAMS);
+  for (var i = 0; i < keys.length; i++)
+    if (modelo && modelo.toLowerCase().indexOf(keys[i].toLowerCase()) >= 0) return PARAMS[keys[i]];
+  return PARAMS["Pit Viper/DR416i"];
+}
+function isBad(val, p) { return p.tipo === "min" ? val < p.limite : val > p.limite; }
+function pctDeg(val, novo, limite) {
+  var faixa = Math.abs(novo - limite);
+  return faixa ? Math.min(Math.round(Math.abs(val - novo) / faixa * 100), 100) : 0;
+}
+function degColor(pct) {
+  return pct > 85 ? "var(--red)" : pct > 60 ? "var(--orange)" : "var(--green)";
+}
+
+// =========================================================
+// DADOS (em producao: substituir por fetch() para API Python)
+// =========================================================
+var RAW = [
+  {tag:"1101PF1601",modelo:"Pit Viper/DR416i",om:"202503926856",data:"2025-08-18",area:"FASE 6",
+   horimetro:9240,analista:"BRUNO SILVA",lado:"LC (lado cabine)",
+   roda_guia:25,elo:154,motriz:277,rol_sup:[189,189,189,189,189],sapata:81,passo:1045,bucha:13.8,rolete_inf:70.3,danif:0},
+  {tag:"1101PF1601",modelo:"Pit Viper/DR416i",om:"202503926856",data:"2025-08-18",area:"FASE 6",
+   horimetro:9240,analista:"BRUNO SILVA",lado:"LNC (lado nao cabine)",
+   roda_guia:25,elo:154,motriz:278,rol_sup:[189,189,190,190,189],sapata:82.5,passo:1045,bucha:13.9,rolete_inf:70.5,danif:1},
+  {tag:"1101PF1601",modelo:"Pit Viper/DR416i",om:"202504627719",data:"2025-09-19",area:"PATIO 320",
+   horimetro:9553,analista:"BRUNO SILVA",lado:"LC (lado cabine)",
+   roda_guia:22.5,elo:154,motriz:275,rol_sup:[189,189,189,189,189],sapata:81,passo:1045.5,bucha:13.7,rolete_inf:70.2,danif:0},
+  {tag:"PZ1001SA02",modelo:"Pit Viper/DR416i",om:"202503858807",data:"2025-08-18",area:"PATIO 320",
+   horimetro:45917,analista:"BRUNO SILVA",lado:"LC (lado cabine)",
+   roda_guia:23,elo:152,motriz:282,rol_sup:[189,189,189,189,188],sapata:81,passo:1045,bucha:13.9,rolete_inf:69.3,danif:0},
+  {tag:"PZ1001SA02",modelo:"Pit Viper/DR416i",om:"202503858807",data:"2025-08-18",area:"PATIO 320",
+   horimetro:45917,analista:"BRUNO SILVA",lado:"LNC (lado nao cabine)",
+   roda_guia:23,elo:153,motriz:280,rol_sup:[189,189,189,189,188],sapata:82,passo:1046,bucha:13.9,rolete_inf:69,danif:0},
+  {tag:"PZ1001SA03",modelo:"Pit Viper/DR416i",om:"202503099260",data:"2025-08-01",area:"FASE 5",
+   horimetro:39050,analista:"BRUNO SILVA",lado:"LC (lado cabine)",
+   roda_guia:23,elo:155,motriz:283,rol_sup:[189,190,189,189,189],sapata:84,passo:1045,bucha:13.7,rolete_inf:64,danif:5},
+  {tag:"PZ1001SA03",modelo:"Pit Viper/DR416i",om:"202503099260",data:"2025-08-01",area:"FASE 5",
+   horimetro:39050,analista:"BRUNO SILVA",lado:"LNC (lado nao cabine)",
+   roda_guia:24,elo:155,motriz:283,rol_sup:[189,190,189,190,189],sapata:84,passo:1045,bucha:13.9,rolete_inf:64.5,danif:0}
+];
+
+function analisar(r) {
+  var P = getP(r.modelo);
+  var desvios = [];
+  function chk(val, p, label) {
+    if (val == null) return;
+    if (isBad(val, p)) {
+      var dp = p.tipo === "min"
+        ? parseFloat(((p.limite - val) / p.limite * 100).toFixed(1))
+        : parseFloat(((val - p.limite) / p.limite * 100).toFixed(1));
+      desvios.push({campo:label, medido:val, limite:p.limite, novo:p.novo, tipo:p.tipo, desvio_pct:dp});
+    }
+  }
+  chk(r.roda_guia,  P.roda_guia,  "Roda Guia - desgaste excessivo");
+  chk(r.elo,        P.elo,         "Elo - desgaste da corrente");
+  chk(r.motriz,     P.motriz,      "Motriz - desgaste das garras");
+  chk(r.sapata,     P.sapata,      "Sapata - espessura critica");
+  chk(r.passo,      P.passo,       "Passo - corrente elongada");
+  chk(r.bucha,      P.bucha,       "Bucha - desgaste excessivo");
+  chk(r.rolete_inf, P.rolete_inf,  "Rolete Inferior - desgaste");
+  for (var i = 0; i < r.rol_sup.length; i++)
+    chk(r.rol_sup[i], P.rolete_sup, "Rolete Superior " + (i+1) + " - desgaste");
+  if (r.danif >= P.danif_critico)
+    desvios.push({campo:"Roletes Danificados - critico", medido:r.danif, limite:P.danif_critico, novo:0, tipo:"max", desvio_pct:100});
+  else if (r.danif >= P.danif_atencao)
+    desvios.push({campo:"Roletes Danificados - atencao", medido:r.danif, limite:P.danif_atencao, novo:0, tipo:"max", desvio_pct:50});
+
+  var pctVida = parseFloat((r.horimetro / P.vida_util * 100).toFixed(1));
+  var status = "OK";
+  if (desvios.length) {
+    var mx = Math.max.apply(null, desvios.map(function(d){return d.desvio_pct;}));
+    status = (mx > 5 || pctVida > 90) ? "CRITICO" : "ATENCAO";
+  } else if (pctVida > 80) status = "ATENCAO";
+
+  var o = {}; for (var k in r) o[k] = r[k];
+  o.P = P; o.desvios = desvios; o.pctVida = pctVida; o.status = status;
+  o.cls = status === "CRITICO" ? "red" : status === "ATENCAO" ? "orange" : "green";
+  o.urgencia = status === "CRITICO" ? 7 : status === "ATENCAO" ? 30 : null;
+  return o;
+}
+
+var ANALISES = RAW.map(analisar);
+var CRITICOS = ANALISES.filter(function(a){return a.status==="CRITICO";});
+var ATENCAO  = ANALISES.filter(function(a){return a.status==="ATENCAO";});
+var OK       = ANALISES.filter(function(a){return a.status==="OK";});
+
+// KPIs
+document.getElementById("ts").textContent = new Date().toLocaleString("pt-BR");
+document.getElementById("kCrit").textContent  = CRITICOS.length;
+document.getElementById("kAten").textContent  = ATENCAO.length;
+document.getElementById("kOk").textContent    = OK.length;
+document.getElementById("kTotal").textContent = ANALISES.length;
+var tags = {}; ANALISES.forEach(function(a){tags[a.tag]=1;});
+document.getElementById("kEquip").textContent = Object.keys(tags).length;
+var datas = ANALISES.map(function(a){return a.data;}).sort();
+document.getElementById("kData").textContent = datas.length ? datas[datas.length-1].split("-").reverse().join("/") : "--";
+document.getElementById("kAnalista").textContent = ANALISES.length ? ANALISES[0].analista : "--";
+document.getElementById("scCrit").textContent = CRITICOS.length;
+document.getElementById("scAten").textContent = ATENCAO.length;
+document.getElementById("scOk").textContent   = OK.length;
+
+// SIDEBAR
+function renderSidebar(list, elId, cls) {
+  var el = document.getElementById(elId);
+  if (!list.length) { el.innerHTML = "<div style='padding:10px 16px;font-family:var(--font-mono);font-size:10px;color:var(--t4)'>Nenhum item</div>"; return; }
+  var html = "";
+  list.forEach(function(a) {
+    var idx = ANALISES.indexOf(a);
+    html += "<div class='item-card' id='ic-"+idx+"' onclick='selectItem("+idx+")'>" +
+      "<div class='ic-indicator "+cls+"'></div>" +
+      "<div class='ic-body'>" +
+        "<div class='ic-tag'>"+a.tag+"</div>" +
+        "<div class='ic-sub'>"+a.lado.substring(0,3)+" &bull; "+a.area+" &bull; "+a.horimetro.toLocaleString("pt-BR")+"h</div>" +
+      "</div>" +
+      "<div class='ic-tag-badge "+cls+"'>"+(a.urgencia ? a.urgencia+"d" : "OK")+"</div>" +
+    "</div>";
+  });
+  el.innerHTML = html;
+}
+renderSidebar(CRITICOS, "listCrit", "red");
+renderSidebar(ATENCAO,  "listAten", "orange");
+renderSidebar(OK,       "listOk",   "green");
+
+// DETAIL
+var currentIdx = null;
+var chatHistory = [];
+
+function selectItem(idx) {
+  currentIdx = idx;
+  document.querySelectorAll(".item-card").forEach(function(c){c.classList.remove("active");});
+  var ic = document.getElementById("ic-"+idx);
+  if (ic) ic.classList.add("active");
+  renderDetail(ANALISES[idx]);
+}
+
+function renderDetail(a) {
+  var P = a.P;
+  var vc = a.pctVida > 90 ? "var(--red)" : a.pctVida > 75 ? "var(--orange)" : "var(--green)";
+
+  // Roletes superiores
+  var rolHtml = "";
+  a.rol_sup.forEach(function(v, i) {
+    var bad = isBad(v, P.rolete_sup);
+    var deg = pctDeg(v, P.rolete_sup.novo, P.rolete_sup.limite);
+    var dc = degColor(deg);
+    rolHtml += "<div class='rol-card"+(bad?" bad":"")+"'>" +
+      "<div class='rol-card-label'>SUPERIOR "+(i+1)+"</div>" +
+      "<div class='rol-card-val'>"+v+"</div>" +
+      "<div class='rol-deg-bar'><div class='rol-deg-fill' style='width:"+deg+"%;background:"+dc+"'></div></div>" +
+      "<div class='rol-deg-pct' style='color:"+dc+"'>"+deg+"%</div>" +
+    "</div>";
+  });
+
+  // Componentes principais
+  var comps = [
+    {k:"RODA GUIA",   v:a.roda_guia,  p:P.roda_guia},
+    {k:"ELO",         v:a.elo,        p:P.elo},
+    {k:"MOTRIZ",      v:a.motriz,     p:P.motriz},
+    {k:"SAPATA",      v:a.sapata,     p:P.sapata},
+    {k:"PASSO",       v:a.passo,      p:P.passo},
+    {k:"BUCHA",       v:a.bucha,      p:P.bucha},
+    {k:"ROLETE INF.", v:a.rolete_inf, p:P.rolete_inf},
+    {k:"DANIFICADOS", v:a.danif,      p:{novo:0, limite:P.danif_critico, tipo:"max", unit:"un"}}
+  ];
+  var compHtml = "";
+  comps.forEach(function(c) {
+    var bad = isBad(c.v, c.p);
+    var deg = pctDeg(c.v, c.p.novo, c.p.limite);
+    var dc = degColor(deg);
+    var dv = null;
+    a.desvios.forEach(function(d){ if (d.campo.toLowerCase().indexOf(c.k.toLowerCase().split(" ")[0].toLowerCase()) >= 0) dv = d; });
+    var limStr = c.p.tipo === "min" ? "min: "+c.p.limite : "max: "+c.p.limite;
+    compHtml += "<div class='comp-card"+(bad?" bad":"")+"'>" +
+      "<div class='comp-card-top'>" +
+        "<div class='comp-name'>"+c.k+"</div>" +
+        (bad ? "<div class='comp-alert'>+"+( dv ? dv.desvio_pct : "?")+"% FORA</div>" : "") +
+      "</div>" +
+      "<div class='comp-val"+(bad?" bad":"")+"'>"+c.v+"</div>" +
+      "<div class='comp-unit'>"+c.p.unit+" &bull; "+limStr+" &bull; novo: "+c.p.novo+"</div>" +
+      "<div class='comp-deg-row'>" +
+        "<div class='comp-deg-bar'><div class='comp-deg-fill' style='width:"+deg+"%;background:"+dc+"'></div></div>" +
+        "<div class='comp-deg-pct' style='color:"+dc+"'>"+deg+"%</div>" +
+      "</div>" +
+      "<div class='comp-limits'>Desgaste consumido</div>" +
+    "</div>";
+  });
+
+  // Desvios
+  var desviosHtml;
+  if (a.desvios.length) {
+    desviosHtml = "<div class='sec-title'>Alertas de desgaste <div class='sec-title-line'></div></div>" +
+      "<div class='desvios-box'>";
+    a.desvios.forEach(function(d) {
+      desviosHtml += "<div class='desvio-row'>" +
+        "<div class='desvio-icon'>&#9888;</div>" +
+        "<div class='desvio-label'>"+d.campo+"</div>" +
+        "<div class='desvio-medido'>Medido: "+d.medido+" / Lim: "+d.limite+"</div>" +
+        "<div class='desvio-pct'>+"+d.desvio_pct+"%</div>" +
+      "</div>";
+    });
+    desviosHtml += "</div>";
+  } else {
+    desviosHtml = "<div class='ok-box'>&#9989; Todos os componentes dentro dos parametros do fabricante</div>";
+  }
+
+  var urgHtml = "";
+  if (a.urgencia) {
+    urgHtml = "<div class='urgencia-box'>" +
+      "<div class='urgencia-label'>Substituir em ate</div>" +
+      "<div class='urgencia-val "+a.cls+"'>"+a.urgencia+" dias</div>" +
+    "</div>";
+  }
+
+  document.getElementById("mainPanel").innerHTML =
+    "<div class='detail'>" +
+      "<div class='detail-header'>" +
+        "<div>" +
+          "<div class='detail-tag'>"+a.tag+"</div>" +
+          "<div class='detail-modelo'>"+a.modelo+" &bull; OM: "+a.om+"</div>" +
+          "<div class='detail-meta'>" +
+            "<span>&#128205; "+a.area+"</span>" +
+            "<span>&#128197; "+a.data+"</span>" +
+            "<span>&#8596; "+a.lado+"</span>" +
+            "<span>&#128100; "+a.analista+"</span>" +
+            "<span>&#9201; "+a.horimetro.toLocaleString("pt-BR")+"h</span>" +
+          "</div>" +
+        "</div>" +
+        "<div style='display:flex;flex-direction:column;align-items:flex-end;gap:10px'>" +
+          "<div class='status-pill "+a.cls+"'>"+a.status+"</div>" +
+          urgHtml +
+        "</div>" +
+      "</div>" +
+
+      "<div class='vida-section'>" +
+        "<div class='vida-label'>Vida Util</div>" +
+        "<div class='vida-bar-wrap'>" +
+          "<div class='vida-bar-track'>" +
+            "<div class='vida-bar-fill' style='width:"+Math.min(a.pctVida,100)+"%;background:"+vc+"'></div>" +
+          "</div>" +
+          "<div class='vida-bar-labels'><span>0h</span><span>"+a.horimetro.toLocaleString("pt-BR")+"h atual</span><span>"+P.vida_util.toLocaleString("pt-BR")+"h</span></div>" +
+        "</div>" +
+        "<div class='vida-pct' style='color:"+vc+"'>"+a.pctVida+"%</div>" +
+      "</div>" +
+
+      "<div class='sec-title'>Roletes Superiores &bull; novo "+P.rolete_sup.novo+"mm &bull; limite "+P.rolete_sup.limite+"mm <div class='sec-title-line'></div></div>" +
+      "<div class='rol-sup-grid'>"+rolHtml+"</div>" +
+
+      "<div class='sec-title'>Componentes &bull; medicao vs parametros do fabricante <div class='sec-title-line'></div></div>" +
+      "<div class='comp-grid'>"+compHtml+"</div>" +
+
+      desviosHtml +
+    "</div>";
+}
+
+// CHAT
+function addMsg(txt, role) {
+  var el = document.getElementById("chatMsgs");
+  var d = document.createElement("div");
+  d.className = "msg " + role;
+  d.textContent = txt;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+  return d;
+}
+function qask(t) { document.getElementById("ci").value = t; send(); }
+
+async function send() {
+  var ci = document.getElementById("ci");
+  var btn = document.getElementById("csbtn");
+  var txt = ci.value.trim();
+  if (!txt) return;
+  addMsg(txt, "user");
+  ci.value = ""; btn.disabled = true;
+  var sel = currentIdx != null ? ANALISES[currentIdx] : null;
+  var ctx = "SISTEMA: Material Rodante GD - Salobo (Pit Viper DR416i + FlexiROC D65)\n\n" +
+    "PARAMETROS DR416i: Roda Guia novo=22.5/limite=34.5 | Elo 155.5/142.5 | Motriz 284/270 | Rol.Sup 190/167.5 | Sapata 85/70.6 | Passo max=1055.5 | Bucha 14/10.7 | Rolete Inf 73.9/61.2\n\n" +
+    "RESUMO: Total="+ANALISES.length+" | Criticos="+CRITICOS.length+" | Atencao="+ATENCAO.length+" | OK="+OK.length+"\n\n" +
+    "CRITICOS:\n"+CRITICOS.map(function(a){return a.tag+" ["+a.lado.substring(0,3)+"] "+a.horimetro.toLocaleString()+"h ("+a.pctVida+"%) | "+a.desvios.map(function(d){return d.campo+" +"+d.desvio_pct+"%";}).join(", ");}).join("\n")+"\n\n" +
+    "ATENCAO:\n"+ATENCAO.map(function(a){return a.tag+" ["+a.lado.substring(0,3)+"] "+a.horimetro.toLocaleString()+"h ("+a.pctVida+"%)";}).join("\n")+"\n\n" +
+    (sel ? "SELECIONADO: "+sel.tag+" "+sel.lado+" | "+sel.status+" | desvios="+sel.desvios.map(function(d){return d.campo;}).join(", ")+"\n\n" : "") +
+    "PERGUNTA: "+txt;
+  chatHistory.push({role:"user", content:ctx});
+  var loading = addMsg("Analisando...", "loading");
+  try {
+    var resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:1000,
+        system:"Voce e especialista em PCM e inspecao de material rodante de perfuratrizes Pit Viper DR416i e FlexiROC D65 na mineracao. Os parametros sao os reais do fabricante. Responda de forma tecnica, direta e objetiva para o time de manutencao.",
+        messages:chatHistory
+      })
+    });
+    var data = await resp.json();
+    var ans = (data.content && data.content[0]) ? data.content[0].text : "Erro ao processar.";
+    loading.remove();
+    addMsg(ans, "agent");
+    chatHistory.push({role:"assistant", content:ans});
+  } catch(e) {
+    loading.remove();
+    addMsg("Erro de conexao com a API.", "loading");
+  }
+  btn.disabled = false;
+}
+</script>
+</body>
+</html>
